@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 
-from items import KaNongItem
+from loanforum.items import KaNongItem
 
 
 class A51kanongSpider(scrapy.Spider):
@@ -33,7 +33,6 @@ class A51kanongSpider(scrapy.Spider):
             yield scrapy.Request(url=full_url, meta={'item':item},callback=self.parse_product_detail,dont_filter=True)
 
             # 产品列表页 下一页
-            # self.save_origin_file(response)
             next_page = response.xpath("//a[@class='next']/@href")
             if next_page:
                 full_url = "{}{}".format(self.base_url, next_page.extract()[0])

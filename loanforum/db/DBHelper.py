@@ -42,6 +42,13 @@ class DBHelper():
         insert.addErrback(self._handle_error)
         return item
 
+    # 保存网贷金的数据
+    def save_wangdaijin(self, item):
+        # 插入数据
+        insert = self.dbpool.runInteraction(self._conditional_insert_wangdaijin, item)
+        insert.addErrback(self._handle_error)
+        return item
+
     # 写入数据库中
     def _conditional_insert_kanong(self, tx, item):
         sql = "delete from t_kanong where pid = '{}';".format(item['pid'])
@@ -70,7 +77,21 @@ class DBHelper():
                   item['platform'][0], item['product'][0], item['phone'][0], item['zhengxi'][0], \
                   item['shijidaokuang'][0], item['category'][0], item['xuyaoziliao'][0], item['createTime'])
         tx.execute(sql, params)
+        # 写入数据库中
 
+    def _conditional_insert_wangdaijin(self, tx, item):
+        sql = "delete from t_wangdaijin where pid = '{}';".format(item['pid'])
+        tx.execute(sql)
+
+        sql = "insert into t_wangdaijin(pid,name,ptime,phone,category,edu,qixian,feiyong,shenhefangshi,fangkuangsudu,huankuanfangshi,daozhangfangshi,shijidaokuang,xuyaoziliao,createTime) " \
+              "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        item['createTime'] = time.strftime('%Y-%m-%d %H:%M:%S',
+                                           time.localtime(time.time()))
+        params = (item["pid"], item['name'], item['ptime'], item['phone'], \
+                  item['category'], item['edu'], item['qixian'], item['feiyong'], \
+                  item['shenhefangshi'], item['fangkuangsudu'], item['huankuanfangshi'], item['daozhangfangshi'], \
+                  item['shijidaokuang'], item['xuyaoziliao'], item['createTime'])
+        tx.execute(sql, params)
 
     #错误处理方法
     def _handle_error(self, failue):

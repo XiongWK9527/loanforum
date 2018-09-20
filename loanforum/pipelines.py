@@ -8,6 +8,7 @@ import json
 
 from loanforum.db.DBHelper import DBHelper
 from spiders.a51kanong import A51kanongSpider
+from spiders.wangdaijin import WangdaijinSpider
 from spiders.zhongxinwanka import ZhongxinwankaSpider
 
 
@@ -21,4 +22,6 @@ class LoanforumPipeline(object):
             self.db.save_zxwk(item)
         elif spider.name == A51kanongSpider.name:
             self.db.save_51kanong(item)
+        elif spider.name == WangdaijinSpider.name:
+            self.db.save_wangdaijin(item)
         return item
