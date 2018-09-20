@@ -35,7 +35,28 @@ class DBHelper():
         insert.addErrback(self._handle_error)
         return item
 
-    #写入数据库中
+    # 保存51卡农的数据
+    def save_51kanong(self, item):
+        # 插入数据
+        insert = self.dbpool.runInteraction(self._conditional_insert_kanong, item)
+        insert.addErrback(self._handle_error)
+        return item
+
+    # 写入数据库中
+    def _conditional_insert_kanong(self, tx, item):
+        sql = "delete from t_kanong where pid = '{}';".format(item['pid'])
+        tx.execute(sql)
+
+        sql = "insert into t_kanong(pid,name,edu,description,feiyong,applyNum,qixian,fangkuangsudu,shenhefangshi,daozhangfangshi,zhengxi,platform,createTime) " \
+              "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        item['createTime'] = time.strftime('%Y-%m-%d %H:%M:%S',
+                                           time.localtime(time.time()))
+        params = (item["pid"], item['name'], item['edu'], item['description'], \
+                  item['feiyong'], item['applyNum'], item['qixian'], item['fangkuangsudu'], \
+                  item['shenhefangshi'], item['daozhangfangshi'], item['zhengxi'], item['platform'], \
+                  item['createTime'])
+        tx.execute(sql, params)
+
     def _conditional_insert_zxwk(self, tx, item):
         sql = "delete from t_zxwk where pid = '{}';".format(item['pid'][0])
         tx.execute(sql)
@@ -49,6 +70,7 @@ class DBHelper():
                   item['platform'][0], item['product'][0], item['phone'][0], item['zhengxi'][0], \
                   item['shijidaokuang'][0], item['category'][0], item['xuyaoziliao'][0], item['createTime'])
         tx.execute(sql, params)
+
 
     #错误处理方法
     def _handle_error(self, failue):

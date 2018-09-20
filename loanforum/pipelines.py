@@ -7,6 +7,8 @@
 import json
 
 from loanforum.db.DBHelper import DBHelper
+from spiders.a51kanong import A51kanongSpider
+from spiders.zhongxinwanka import ZhongxinwankaSpider
 
 
 class LoanforumPipeline(object):
@@ -15,5 +17,8 @@ class LoanforumPipeline(object):
         self.db = DBHelper()
 
     def process_item(self, item, spider):
-        self.db.save_zxwk(item)
+        if spider.name == ZhongxinwankaSpider.name:
+            self.db.save_zxwk(item)
+        elif spider.name == A51kanongSpider.name:
+            self.db.save_51kanong(item)
         return item

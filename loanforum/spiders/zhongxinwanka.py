@@ -44,7 +44,7 @@ class ZhongxinwankaSpider(scrapy.Spider):
             yield scrapy.Request(full_url, callback=self.parse_product_detail)
 
         # 产品列表页 下一页
-        self.save_origin_file(response)
+        # self.save_origin_file(response)
         next_page = response.xpath("//a[@class='nxt']/@href")
         if next_page:
             full_url = "{}{}".format(self.base_website_domain, next_page.extract()[0])
@@ -59,7 +59,7 @@ class ZhongxinwankaSpider(scrapy.Spider):
 
     # 解析具体的产品信息
     def parse_product_detail(self, response):
-        self.save_origin_file(response)
+        # self.save_origin_file(response)
         print("product_detail:{}".format(response.url))
 
         url = response.url

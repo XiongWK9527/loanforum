@@ -33,3 +33,18 @@ class ZhonginwankaItem(scrapy.Item):
     createTime = scrapy.Field() # 数据更新时间
 
 
+# 51卡农的数据对象
+class KaNongItem(scrapy.Item):
+    pid = scrapy.Field()  # 产品id
+    name = scrapy.Field()  # 产品名称
+    edu = scrapy.Field()  # 额度
+    description = scrapy.Field()  # 产品描述
+    feiyong = scrapy.Field()  # 费用
+    applyNum = scrapy.Field()  # 申请人数
+    qixian = scrapy.Field()  # 期限
+    fangkuangsudu = scrapy.Field()  # 放款速度
+    shenhefangshi = scrapy.Field()  # 审核方式
+    daozhangfangshi = scrapy.Field()  # 到账方式
+    zhengxi = scrapy.Field()  # 征信要求
+    platform = scrapy.Field()  # 平台名称
+    createTime = scrapy.Field()  # 数据更新时间
