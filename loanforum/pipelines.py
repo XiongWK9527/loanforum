@@ -10,6 +10,7 @@ from loanforum.db.DBHelper import DBHelper
 from spiders.a51kanong import A51kanongSpider
 from spiders.wangdaijin import WangdaijinSpider
 from spiders.zhongxinwanka import ZhongxinwankaSpider
+from spiders.yetu import YetuSpider
 
 
 class LoanforumPipeline(object):
@@ -24,4 +25,6 @@ class LoanforumPipeline(object):
             self.db.save_51kanong(item)
         elif spider.name == WangdaijinSpider.name:
             self.db.save_wangdaijin(item)
+        elif spider.name == YetuSpider.name:
+            self.db.save_yetu(item)
         return item

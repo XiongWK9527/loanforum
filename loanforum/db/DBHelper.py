@@ -49,6 +49,13 @@ class DBHelper():
         insert.addErrback(self._handle_error)
         return item
 
+    # 保存玉兔的数据
+    def save_yetu(self, item):
+        # 插入数据
+        insert = self.dbpool.runInteraction(self._conditional_insert_yetu, item)
+        insert.addErrback(self._handle_error)
+        return item
+
     # 写入数据库中
     def _conditional_insert_kanong(self, tx, item):
         sql = "delete from t_kanong where pid = '{}';".format(item['pid'])
@@ -92,6 +99,20 @@ class DBHelper():
                   item['shenhefangshi'], item['fangkuangsudu'], item['huankuanfangshi'], item['daozhangfangshi'], \
                   item['shijidaokuang'], item['xuyaoziliao'], item['createTime'])
         tx.execute(sql, params)
+
+    def _conditional_insert_yetu(self, tx, item):
+        sql = "delete from t_yetu where pid = '{}';".format(item['pid'])
+        tx.execute(sql)
+
+        sql = "insert into t_yetu(pid,name,edu,fangkuangsudu,qixian,lixi,shenqingtiaojian,xuyaoziliao,shenheshuoming,platform,createTime) " \
+              "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        item['createTime'] = time.strftime('%Y-%m-%d %H:%M:%S',
+                                           time.localtime(time.time()))
+        params = (item["pid"], item['name'], item['edu'], item['fangkuangsudu'], \
+                  item['qixian'], item['lixi'], item['shenqingtiaojian'], item['xuyaoziliao'], \
+                  item['shenheshuoming'], item['platform'], item['createTime'])
+        tx.execute(sql, params)
+
 
     #错误处理方法
     def _handle_error(self, failue):

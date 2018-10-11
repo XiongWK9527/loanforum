@@ -67,3 +67,17 @@ class WangDaiJinItem(scrapy.Item):
     xuyaoziliao = scrapy.Field()  # 需要资料
     createTime = scrapy.Field()  # 数据更新时间
 
+
+# 玉兔的数据对象
+class YeTuItem(scrapy.Item):
+    pid = scrapy.Field()  # 产品id
+    name = scrapy.Field()  # 产品名称
+    edu = scrapy.Field()  # 额度范围
+    fangkuangsudu = scrapy.Field()  # 放款速度
+    qixian = scrapy.Field()  # 借款期限
+    lixi = scrapy.Field()  # 利息
+    shenqingtiaojian = scrapy.Field()  # 申请条件
+    xuyaoziliao = scrapy.Field()  # 需要资料
+    shenheshuoming = scrapy.Field()  # 审核说明
+    platform = scrapy.Field()  # 平台介绍
+    createTime = scrapy.Field()  # 数据更新时间

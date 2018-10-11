@@ -32,12 +32,12 @@ class A51kanongSpider(scrapy.Spider):
             full_url = "{}{}".format(self.base_url, pid)
             yield scrapy.Request(url=full_url, meta={'item':item},callback=self.parse_product_detail,dont_filter=True)
 
-            # 产品列表页 下一页
-            next_page = response.xpath("//a[@class='next']/@href")
-            if next_page:
-                full_url = "{}{}".format(self.base_url, next_page.extract()[0])
-                yield scrapy.Request(full_url)
-            pass
+        # 产品列表页 下一页
+        next_page = response.xpath("//a[@class='next']/@href")
+        if next_page:
+            full_url = "{}{}".format(self.base_url, next_page.extract()[0])
+            yield scrapy.Request(full_url)
+        pass
 
 
     # 解析具体的产品信息
