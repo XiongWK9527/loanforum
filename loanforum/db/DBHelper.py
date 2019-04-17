@@ -20,6 +20,8 @@ class DBHelper():
             charset='utf8',  #编码要加上，否则可能出现中文乱码问题
             cursorclass=pymysql.cursors.DictCursor,
             use_unicode=False,
+            cp_max=20,
+            cp_reconnect=True,
         )
         #**表示将字典扩展为关键字参数,相当于host=xxx,db=yyy....
         dbpool = adbapi.ConnectionPool('pymysql', **dbparams)
@@ -53,6 +55,13 @@ class DBHelper():
     def save_yetu(self, item):
         # 插入数据
         insert = self.dbpool.runInteraction(self._conditional_insert_yetu, item)
+        insert.addErrback(self._handle_error)
+        return item
+
+    # 保存律师会所信息
+    def save_law(self, item):
+        # 插入数据
+        insert = self.dbpool.runInteraction(self._conditional_insert_law, item)
         insert.addErrback(self._handle_error)
         return item
 
@@ -113,6 +122,16 @@ class DBHelper():
                   item['shenheshuoming'], item['platform'], item['createTime'])
         tx.execute(sql, params)
 
+    def _conditional_insert_law(self, tx, item):
+        sql = "delete from t_law where pid = '{}';".format(item['pid'])
+        tx.execute(sql)
+
+        sql = "insert into t_law(pid,name,license,address,phone,website,principal,partner,url) " \
+              "values(%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        params = (item["pid"], item['name'], item['license'], item['address'], \
+                  item['phone'], item['website'], item['principal'], item['partner'], \
+                  item['url'])
+        tx.execute(sql, params)
 
     #错误处理方法
     def _handle_error(self, failue):

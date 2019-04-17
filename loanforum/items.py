@@ -81,3 +81,15 @@ class YeTuItem(scrapy.Item):
     shenheshuoming = scrapy.Field()  # 审核说明
     platform = scrapy.Field()  # 平台介绍
     createTime = scrapy.Field()  # 数据更新时间
+
+
+class LawItem(scrapy.Item):
+    pid = scrapy.Field()  # 主键
+    name = scrapy.Field()  # 律师事务所名称
+    license = scrapy.Field()  # 执业许可证号
+    address = scrapy.Field()  # 律师事务所地址
+    phone = scrapy.Field()  # 电话
+    website = scrapy.Field()  # 律师所网站
+    principal = scrapy.Field()  # 律所负责人
+    partner = scrapy.Field()  # 合伙人
+    url = scrapy.Field() # 事务所地址

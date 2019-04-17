@@ -7,10 +7,11 @@
 import json
 
 from loanforum.db.DBHelper import DBHelper
-from spiders.a51kanong import A51kanongSpider
-from spiders.wangdaijin import WangdaijinSpider
-from spiders.zhongxinwanka import ZhongxinwankaSpider
-from spiders.yetu import YetuSpider
+from loanforum.spiders.a51kanong import A51kanongSpider
+from loanforum.spiders.wangdaijin import WangdaijinSpider
+from loanforum.spiders.zhongxinwanka import ZhongxinwankaSpider
+from loanforum.spiders.yetu import YetuSpider
+from loanforum.spiders.law import LawSpider
 
 
 class LoanforumPipeline(object):
@@ -27,4 +28,6 @@ class LoanforumPipeline(object):
             self.db.save_wangdaijin(item)
         elif spider.name == YetuSpider.name:
             self.db.save_yetu(item)
+        elif spider.name == LawSpider.name:
+            self.db.save_law(item)
         return item
