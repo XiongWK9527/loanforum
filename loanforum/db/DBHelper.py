@@ -65,6 +65,12 @@ class DBHelper():
         insert.addErrback(self._handle_error)
         return item
 
+    def save_law_firm_rank(self, item):
+        # 插入数据
+        insert = self.dbpool.runInteraction(self._conditional_insert_law_firm_rank, item)
+        insert.addErrback(self._handle_error)
+        return item
+
     # 写入数据库中
     def _conditional_insert_kanong(self, tx, item):
         sql = "delete from t_kanong where pid = '{}';".format(item['pid'])
@@ -131,6 +137,17 @@ class DBHelper():
         params = (item["pid"], item['name'], item['license'], item['address'], \
                   item['phone'], item['website'], item['principal'], item['partner'], \
                   item['url'])
+        tx.execute(sql, params)
+
+    def _conditional_insert_law_firm_rank(self, tx, item):
+        # sql = "delete from t_lawfirm_rank where pid = '{}';".format(item['pid'])
+        # tx.execute(sql)
+
+        sql = "insert into t_lawfirm_rank(pid,rank,name,license,company,address,phone,mobile,email,type,url) " \
+              "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        params = (
+        item["pid"], item["rank"], item["name"], item["license"], item["company"], item["address"], item["phone"],
+        item["mobile"], item["email"], item["type"], item["url"])
         tx.execute(sql, params)
 
     #错误处理方法

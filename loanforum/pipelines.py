@@ -4,7 +4,6 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-import json
 
 from loanforum.db.DBHelper import DBHelper
 from loanforum.spiders.a51kanong import A51kanongSpider
@@ -12,6 +11,7 @@ from loanforum.spiders.wangdaijin import WangdaijinSpider
 from loanforum.spiders.zhongxinwanka import ZhongxinwankaSpider
 from loanforum.spiders.yetu import YetuSpider
 from loanforum.spiders.law import LawSpider
+from loanforum.spiders.lawerfirm import LawerfirmSpider
 
 
 class LoanforumPipeline(object):
@@ -30,4 +30,6 @@ class LoanforumPipeline(object):
             self.db.save_yetu(item)
         elif spider.name == LawSpider.name:
             self.db.save_law(item)
+        elif spider.name == LawerfirmSpider.name:
+            self.db.save_law_firm_rank(item)
         return item

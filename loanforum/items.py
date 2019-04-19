@@ -93,3 +93,16 @@ class LawItem(scrapy.Item):
     principal = scrapy.Field()  # 律所负责人
     partner = scrapy.Field()  # 合伙人
     url = scrapy.Field() # 事务所地址
+
+class LawFirmItem(scrapy.Item):
+    pid = scrapy.Field() # 律师id
+    rank = scrapy.Field() # 排名
+    name = scrapy.Field() # 律师名
+    license = scrapy.Field()  # 执业许可证号
+    company = scrapy.Field()  # 单位
+    address = scrapy.Field() # 地址
+    phone = scrapy.Field() # 电话
+    mobile = scrapy.Field() # 手机
+    email = scrapy.Field() # 邮箱
+    type = scrapy.Field() # 类别
+    url = scrapy.Field()  # 网页
