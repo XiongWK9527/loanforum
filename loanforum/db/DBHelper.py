@@ -65,9 +65,17 @@ class DBHelper():
         insert.addErrback(self._handle_error)
         return item
 
+    ## 保存律师排名
     def save_law_firm_rank(self, item):
         # 插入数据
         insert = self.dbpool.runInteraction(self._conditional_insert_law_firm_rank, item)
+        insert.addErrback(self._handle_error)
+        return item
+
+    ## 保存律师事务所排名
+    def save_cnlawer_rank(self, item):
+        # 插入数据
+        insert = self.dbpool.runInteraction(self._conditional_insert_cnlawer_rank, item)
         insert.addErrback(self._handle_error)
         return item
 
@@ -148,6 +156,16 @@ class DBHelper():
         params = (
         item["pid"], item["rank"], item["name"], item["license"], item["company"], item["address"], item["phone"],
         item["mobile"], item["email"], item["type"], item["url"])
+        tx.execute(sql, params)
+
+    def _conditional_insert_cnlawer_rank(self, tx, item):
+        # sql = "delete from t_lawfirm_rank where pid = '{}';".format(item['pid'])
+        # tx.execute(sql)
+
+        sql = "insert into t_cnlawer_rank(rank,name,address,law,area) " \
+              "values(%s,%s,%s,%s,%s)"
+        params = (
+        item["rank"], item["name"], item["address"], item["law"], item["area"])
         tx.execute(sql, params)
 
     #错误处理方法

@@ -12,6 +12,7 @@ from loanforum.spiders.zhongxinwanka import ZhongxinwankaSpider
 from loanforum.spiders.yetu import YetuSpider
 from loanforum.spiders.law import LawSpider
 from loanforum.spiders.lawerfirm import LawerfirmSpider
+from loanforum.spiders.cnlawer import CnlawerSpider
 
 
 class LoanforumPipeline(object):
@@ -32,4 +33,6 @@ class LoanforumPipeline(object):
             self.db.save_law(item)
         elif spider.name == LawerfirmSpider.name:
             self.db.save_law_firm_rank(item)
+        elif spider.name == CnlawerSpider.name:
+            self.db.save_cnlawer_rank(item)
         return item

@@ -106,3 +106,10 @@ class LawFirmItem(scrapy.Item):
     email = scrapy.Field() # 邮箱
     type = scrapy.Field() # 类别
     url = scrapy.Field()  # 网页
+
+class CnLawerItem(scrapy.Item):
+    rank = scrapy.Field()  # 排名
+    name = scrapy.Field()  # 律师事务所名称
+    address = scrapy.Field() # 地址
+    law = scrapy.Field() # 律师
+    area = scrapy.Field() # 地区

@@ -90,8 +90,15 @@ ITEM_PIPELINES = {
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # db configuration
-MYSQL_HOST = '192.168.0.10'
+# MYSQL_HOST = '192.168.0.10'
+# MYSQL_DBNAME = 'netloan'         #数据库名字，请修改
+# MYSQL_USER = 'test2'             #数据库账号，请修改
+# MYSQL_PASSWD = 'mx'         #数据库密码，请修改
+# MYSQL_PORT = 3306               #数据库端口，在dbhelper中使用
+
+## localhost
+MYSQL_HOST = '127.0.0.1'
 MYSQL_DBNAME = 'netloan'         #数据库名字，请修改
-MYSQL_USER = 'test2'             #数据库账号，请修改
-MYSQL_PASSWD = 'mx'         #数据库密码，请修改
+MYSQL_USER = 'root'             #数据库账号，请修改
+MYSQL_PASSWD = ''         #数据库密码，请修改
 MYSQL_PORT = 3306               #数据库端口，在dbhelper中使用

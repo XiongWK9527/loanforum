@@ -4,7 +4,7 @@ import re
 import scrapy
 from lxml import etree
 
-from items import LawFirmItem
+from loanforum.items import LawFirmItem
 
 
 class LawerfirmSpider(scrapy.Spider):
