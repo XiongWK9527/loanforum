@@ -5,15 +5,35 @@ import re
 import scrapy
 from loanforum.items import WxbItem
 
+'''
+统计sql
+select category, rank, name, wx_alias, describle, pub_total, read_num_max, avg_read_num, avg_like_num, fans_num_estimate, index_scores, qrcode from t_wxb order by cate_id, rank asc
+
+备注：
+1: 每次需要更改cookies
+2: 选择爬取的日榜，周榜，月榜的类型
+3: 选择爬取的时间
+   日榜 rank_day = "2019-05-05"
+   周榜 rank_day = "2019-04-29" rank_day_end= "2019-05-05"
+   月榜 rank_day = "2019-04"
+   
+'''
 
 class WxbdataSpider(scrapy.Spider):
     name = 'wxbdata'
     allowed_domains = ['data.wxb.com']
     start_urls = ['http://data.wxb.com/']
-    ## 需要爬的日期
-    rank_day = "2019-05-05"
+
     page_size = 50
     max_size = 300
+
+    # 爬取数据的类型，1:日 2:周 3:月
+    rank_type = 1
+
+    ## 需要爬的日期
+    # rank_day = "2019-05-05"
+    rank_day = "2019-04"
+    rank_day_end = ""
 
     headers = {
         "X-Requested-With": "XMLHttpRequest",
@@ -61,8 +81,20 @@ class WxbdataSpider(scrapy.Spider):
             category_list.append(str(x))
 
         for category in category_list:
-            yield scrapy.Request(url="https://data.wxb.com/rank/day/{rank_day}/{category}?sort=&page=1&page_size={page_size}"
-                                 .format(rank_day=self.rank_day, category=category, page_size=self.page_size),
+            url = ''
+            # 日榜
+            if self.rank_type == 1:
+                url = "https://data.wxb.com/rank/day/{rank_day}/{category}?sort=&page=1&page_size={page_size}"\
+                    .format(rank_day=self.rank_day, category=category, page_size=self.page_size)
+            # 周榜
+            elif self.rank_type == 2:
+                url = "https://data.wxb.com/rank/week/{rank_day}/{rank_day_end}/{category}?sort=&page=1&page_size={page_size}" \
+                    .format(rank_day=self.rank_day, rank_day_end=self.rank_day_end, category=category, page_size=self.page_size)
+            # 月榜
+            elif self.rank_type == 3:
+                url = "https://data.wxb.com/rank/month/{rank_day}/{category}?sort=&page=1&page_size={page_size}"\
+                    .format(rank_day=self.rank_day, category=category, page_size=self.page_size)
+            yield scrapy.Request(url=url,
                                  headers=self.headers,
                                  cookies=self.cookie,
                                  callback=self.parse)
@@ -87,7 +119,7 @@ class WxbdataSpider(scrapy.Spider):
         url = response.url
         print("crawl: url={0}".format(url))
         page = self.__get_regex_value(url, r'page=(\d+)')
-        category = self.__get_regex_value(url, r'rank/day/\S+?/([-\d]+?)\?')
+        category = self.__get_regex_value(url, r'/([-\d]+?)\?')
 
         content = response.body.decode(response.encoding, errors='ignore')
         ## 解析值
@@ -115,8 +147,21 @@ class WxbdataSpider(scrapy.Spider):
         ## 普通会员只能爬取top300
         if pageValue < (self.max_size / self.page_size):
             pageValue = pageValue + 1
-            yield scrapy.Request(url="https://data.wxb.com/rank/day/{rank_day}/{category}?sort=&page={page}&page_size={page_size}"
-                                 .format(rank_day=self.rank_day, category=category, page=pageValue, page_size=self.page_size),
+
+            url = ''
+            # 日榜
+            if self.rank_type == 1:
+                url = "https://data.wxb.com/rank/day/{rank_day}/{category}?sort=&page={page}&page_size={page_size}"\
+                    .format(rank_day=self.rank_day, category=category, page=pageValue, page_size=self.page_size)
+            # 周榜
+            elif self.rank_type == 2:
+                url = "https://data.wxb.com/rank/week/{rank_day}/{rank_day_end}/{category}?sort=&page={page}&page_size={page_size}" \
+                    .format(rank_day=self.rank_day, rank_day_end=self.rank_day_end, category=category, page=pageValue, page_size=self.page_size)
+            # 月榜
+            elif self.rank_type == 3:
+                url = "https://data.wxb.com/rank/month/{rank_day}/{category}?sort=&page={page}&page_size={page_size}" \
+                    .format(rank_day=self.rank_day, category=category, page=pageValue, page_size=self.page_size)
+            yield scrapy.Request(url=url,
                                  headers=self.headers,
                                  cookies=self.cookie,
                                  callback=self.parse)
