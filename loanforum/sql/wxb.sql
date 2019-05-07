@@ -1,0 +1,20 @@
+CREATE TABLE `t_wxb` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `rank_day` varchar(32) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '日期',
+  `category` varchar(10) CHARACTER SET utf8 DEFAULT '' COMMENT '类别',
+  `rank` int(4) DEFAULT NULL COMMENT '排名',
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '公众号',
+  `wx_alias` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '微信号',
+  `wx_origin_id` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '微信号/原始号',
+  `describle` varchar(512) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '简介',
+  `pub_total` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '发布次数/篇数',
+  `read_num_max` varchar(32) CHARACTER SET utf8 DEFAULT '' COMMENT '头条阅读',
+  `avg_read_num` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '平均阅读',
+  `avg_like_num` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '平均点赞',
+  `fans_num_estimate` varchar(32) CHARACTER SET utf8 DEFAULT NULL COMMENT '预估粉丝数',
+  `index_scores` varchar(16) CHARACTER SET utf8 DEFAULT NULL COMMENT '小宝指数',
+  `qrcode` varchar(512) CHARACTER SET utf8 DEFAULT NULL COMMENT '二维码',
+  `cate_id` int(4) DEFAULT NULL COMMENT '类别id',
+  `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='微小宝数据';
