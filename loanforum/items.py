@@ -129,3 +129,4 @@ class WxbItem(scrapy.Item):
     fans_num_estimate = scrapy.Field()  # 预估粉丝数
     index_scores = scrapy.Field()  # 小宝指数
     qrcode = scrapy.Field()  # 二维码
+    cate_id = scrapy.Field()  # 类型id

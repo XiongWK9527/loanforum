@@ -29,15 +29,40 @@ class WxbdataSpider(scrapy.Spider):
         "PHPSESSID": "832b74e72ebc087e18e567ff6386c3c1"
     }
 
-    def start_requests(self):
-        # 需要爬去的页面
-        category = ["-1"]
-        for x in range(21):
-            category.append(str(x + 1))
+    category_dict = {
+        "-1": "总榜",
+        "1": "时事资讯",
+        "2": "数码科技",
+        "3": "汽车",
+        "4": "房产家居",
+        "5": "职场招聘",
+        "6": "财经理财",
+        "7": "生活",
+        "8": "情感励志",
+        "9": "女性时尚",
+        "10": "旅行",
+        "11": "运动健康",
+        "12": "餐饮美食",
+        "13": "搞笑娱乐",
+        "14": "明星影视",
+        "15": "母婴",
+        "16": "文化教育",
+        "17": "创业管理",
+        "18": "政务",
+        "19": "企业",
+        "20": "地方",
+        "21": "其他"
+    }
 
-        for index in category:
-            yield scrapy.Request(url="https://data.wxb.com/rank/day/{rank_day}/{index}?sort=&page=1&page_size={page_size}"
-                                 .format(rank_day=self.rank_day, index=index, page_size=self.page_size),
+    def start_requests(self):
+        category_list = []
+        # 需要爬去的页面
+        for x in self.category_dict.keys():
+            category_list.append(str(x))
+
+        for category in category_list:
+            yield scrapy.Request(url="https://data.wxb.com/rank/day/{rank_day}/{category}?sort=&page=1&page_size={page_size}"
+                                 .format(rank_day=self.rank_day, category=category, page_size=self.page_size),
                                  headers=self.headers,
                                  cookies=self.cookie,
                                  callback=self.parse)
@@ -48,13 +73,14 @@ class WxbdataSpider(scrapy.Spider):
 
     ## 移除emoji
     def __remove_emoji(self, text):
+        content = str(text).encode('utf-8', 'replace').decode('utf-8')
         emoji_pattern = re.compile("["
                                    u"\U0001F600-\U0001F64F"  # emoticons
                                    u"\U0001F300-\U0001F5FF"  # symbols & pictographs
                                    u"\U0001F680-\U0001F6FF"  # transport & map symbols
                                    u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
                                    "]+", flags=re.UNICODE)
-        return emoji_pattern.sub(r'', str(text))
+        return emoji_pattern.sub(r'', content)
 
 
     def parse(self, response):
@@ -69,7 +95,7 @@ class WxbdataSpider(scrapy.Spider):
         for data in wxb_data['data']:
             item = WxbItem()
             item['rank_day'] = self.rank_day
-            item['category'] = category
+            item['category'] = self.category_dict[category]
             item['rank'] = data['rank']
             item['name'] = self.__remove_emoji(data['name'])
             item['wx_alias'] = data['wx_alias']
@@ -81,7 +107,8 @@ class WxbdataSpider(scrapy.Spider):
             item['avg_like_num'] = data['avg_like_num']
             item['fans_num_estimate'] = data['fans_num_estimate']
             item['index_scores'] = data['index_scores']
-            item['qrcode'] = data['qrcode']
+            item['qrcode'] = str(data['qrcode']).replace("\\", "/").replace("//", "/")
+            item['cate_id'] = category
             yield item
 
         pageValue = int(page)

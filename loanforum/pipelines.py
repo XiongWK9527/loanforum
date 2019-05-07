@@ -38,4 +38,5 @@ class LoanforumPipeline(object):
             self.db.save_cnlawer_rank(item)
         elif spider.name == WxbdataSpider.name:
             self.db.save_wxb_data(item)
+            pass
         return item

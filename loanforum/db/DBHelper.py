@@ -180,12 +180,12 @@ class DBHelper():
         tx.execute("SET NAMES utf8mb4")
         tx.execute("SET CHARACTER SET utf8mb4")
         tx.execute("SET character_set_connection = utf8mb4")
-        sql = "insert into t_wxb(rank_day,category,rank,name,wx_alias,wx_origin_id,describle,pub_total,read_num_max,avg_read_num,avg_like_num,fans_num_estimate,index_scores,qrcode) " \
-              "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        sql = "insert into t_wxb(rank_day,category,rank,name,wx_alias,wx_origin_id,describle,pub_total,read_num_max,avg_read_num,avg_like_num,fans_num_estimate,index_scores,qrcode,cate_id) " \
+              "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
         params = (
             item["rank_day"], item["category"], item["rank"], item["name"], item["wx_alias"],
             item["wx_origin_id"], item["desc"], item["pub_total"], item["read_num_max"], item["avg_read_num"],
-            item["avg_like_num"], item["fans_num_estimate"], item["index_scores"], item["qrcode"])
+            item["avg_like_num"], item["fans_num_estimate"], item["index_scores"], item["qrcode"], item["cate_id"])
         tx.execute(sql, params)
 
     #错误处理方法
