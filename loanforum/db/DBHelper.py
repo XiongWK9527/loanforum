@@ -17,9 +17,9 @@ class DBHelper():
             db=settings['MYSQL_DBNAME'],
             user=settings['MYSQL_USER'],
             passwd=settings['MYSQL_PASSWD'],
-            charset='utf8',  #编码要加上，否则可能出现中文乱码问题
+            # charset='utf8mb4',  #编码要加上，否则可能出现中文乱码问题
             cursorclass=pymysql.cursors.DictCursor,
-            use_unicode=False,
+            use_unicode=True,
             cp_max=20,
             cp_reconnect=True,
         )
@@ -76,6 +76,13 @@ class DBHelper():
     def save_cnlawer_rank(self, item):
         # 插入数据
         insert = self.dbpool.runInteraction(self._conditional_insert_cnlawer_rank, item)
+        insert.addErrback(self._handle_error)
+        return item
+
+    ## 保存wxb数据
+    def save_wxb_data(self, item):
+        # 插入数据
+        insert = self.dbpool.runInteraction(self._conditional_insert_wxb_data, item)
         insert.addErrback(self._handle_error)
         return item
 
@@ -166,6 +173,19 @@ class DBHelper():
               "values(%s,%s,%s,%s,%s)"
         params = (
         item["rank"], item["name"], item["address"], item["law"], item["area"])
+        tx.execute(sql, params)
+
+
+    def _conditional_insert_wxb_data(self, tx, item):
+        tx.execute("SET NAMES utf8mb4")
+        tx.execute("SET CHARACTER SET utf8mb4")
+        tx.execute("SET character_set_connection = utf8mb4")
+        sql = "insert into t_wxb(rank_day,category,rank,name,wx_alias,wx_origin_id,describle,pub_total,read_num_max,avg_read_num,avg_like_num,fans_num_estimate,index_scores,qrcode) " \
+              "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        params = (
+            item["rank_day"], item["category"], item["rank"], item["name"], item["wx_alias"],
+            item["wx_origin_id"], item["desc"], item["pub_total"], item["read_num_max"], item["avg_read_num"],
+            item["avg_like_num"], item["fans_num_estimate"], item["index_scores"], item["qrcode"])
         tx.execute(sql, params)
 
     #错误处理方法

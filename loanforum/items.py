@@ -113,3 +113,19 @@ class CnLawerItem(scrapy.Item):
     address = scrapy.Field() # 地址
     law = scrapy.Field() # 律师
     area = scrapy.Field() # 地区
+
+class WxbItem(scrapy.Item):
+    rank_day = scrapy.Field()  # 日期
+    category = scrapy.Field()  # 类别
+    rank = scrapy.Field()      # 排名
+    name = scrapy.Field()      # 公众号
+    wx_alias = scrapy.Field()  # 微信号
+    wx_origin_id = scrapy.Field()  # 微信号/原始号
+    desc = scrapy.Field()      # 简介
+    pub_total = scrapy.Field() # 发布次数/篇数
+    read_num_max = scrapy.Field()  # 头条阅读
+    avg_read_num = scrapy.Field()  # 平均阅读
+    avg_like_num = scrapy.Field()  # 平均点赞
+    fans_num_estimate = scrapy.Field()  # 预估粉丝数
+    index_scores = scrapy.Field()  # 小宝指数
+    qrcode = scrapy.Field()  # 二维码

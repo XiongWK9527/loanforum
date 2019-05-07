@@ -13,6 +13,7 @@ from loanforum.spiders.yetu import YetuSpider
 from loanforum.spiders.law import LawSpider
 from loanforum.spiders.lawerfirm import LawerfirmSpider
 from loanforum.spiders.cnlawer import CnlawerSpider
+from loanforum.spiders.wxbdata import WxbdataSpider
 
 
 class LoanforumPipeline(object):
@@ -35,4 +36,6 @@ class LoanforumPipeline(object):
             self.db.save_law_firm_rank(item)
         elif spider.name == CnlawerSpider.name:
             self.db.save_cnlawer_rank(item)
+        elif spider.name == WxbdataSpider.name:
+            self.db.save_wxb_data(item)
         return item
